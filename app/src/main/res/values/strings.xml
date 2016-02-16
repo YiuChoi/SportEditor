@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">tencentSport</string>
+    <string name="xposed_description">修改微信运动步数</string>
+</resources>
