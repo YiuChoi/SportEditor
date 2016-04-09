@@ -15,3 +15,5 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-keep public class name.caiyao.tencentsport.MainHook
+-keep public class name.caiyao.tencentsport.SettingFragment{*;}

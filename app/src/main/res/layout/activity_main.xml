@@ -4,40 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="name.caiyao.tencentsport.MainActivity">
-
-    <TextView
-        android:text="默认微信每次获取步数增加1000，若需自定义增加步数，请在下方填写！"
-        android:layout_width="wrap_content"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:layout_height="wrap_content" />
-    <LinearLayout
+    tools:context="name.caiyao.tencentsport.SettingsActivity">
+    <FrameLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:text="增加步数：" />
-
-        <EditText
-            android:id="@+id/add_step"
-            android:inputType="number"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/ok"
-        android:text="确定"
-        android:layout_gravity="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"/>
 </LinearLayout>

@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">tencentSport</string>
-    <string name="xposed_description">修改微信运动步数</string>
+    <string name="xposed_description">修改QQ健康和微信运动步数</string>
+    <string name="title_activity_settings">Settings</string>
 </resources>
