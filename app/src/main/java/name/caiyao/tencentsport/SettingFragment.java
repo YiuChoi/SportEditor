@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.widget.Toast;
 
 public class SettingFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
 
@@ -21,11 +20,13 @@ public class SettingFragment extends PreferenceFragment implements Preference.On
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getPreferenceManager().setSharedPreferencesMode(1);
-        getPreferenceManager().getSharedPreferences().edit()
-                .putBoolean("weixin",true)
-                .putBoolean("qq",true)
-                .putString("magnification", "1000").commit();
         addPreferencesFromResource(R.xml.preference);
+//        getPreferenceManager().getSharedPreferences().edit()
+//                .putBoolean("weixin", true)
+//                .putBoolean("qq", true)
+//                .putString("magnification", "1000")
+//                .apply();
+//        getKey();
     }
 
     @Override
@@ -41,21 +42,15 @@ public class SettingFragment extends PreferenceFragment implements Preference.On
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         changeSummary();
-        Toast.makeText(getActivity(), "重启手机将恢复默认值！", Toast.LENGTH_SHORT).show();
-        SharedPreferences sharedPreferences = getPreferenceManager().getSharedPreferences();
-        boolean isWeixin = sharedPreferences.getBoolean("weixin", false);
-        boolean isQQ = sharedPreferences.getBoolean("qq", false);
-        int m = Integer.valueOf(sharedPreferences.getString("magnification", "1000"));
-        getKey(isWeixin, isQQ, m);
+       // Toast.makeText(getActivity(), "重启将恢复默认值！", Toast.LENGTH_SHORT).show();
+        getKey();
         return true;
     }
 
-    public void getKey(boolean isWeixin, boolean isQQ, int m) {
+    public void getKey() {
+        SharedPreferences sharedPreferences = getPreferenceManager().getSharedPreferences();
         //为了设置实时生效
-        Intent intent = new Intent(SETTING_CHANGED)
-                .putExtra("weixin", isWeixin)
-                .putExtra("qq",isQQ)
-                .putExtra("magnification",m);
+        Intent intent = new Intent(SETTING_CHANGED);
         getActivity().sendBroadcast(intent);
     }
 

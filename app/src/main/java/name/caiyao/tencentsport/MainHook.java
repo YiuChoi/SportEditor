@@ -21,7 +21,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 /**
  * Created by 蔡小木 on 2016/2/16 0016.
  */
-public class MainHook implements IXposedHookLoadPackage {
+public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
     public final String SETTING_CHANGED = "name.caiyao.tencentsport.SETTING_CHANGED";
     private static final String WEXIN = "com.tencent.mm";
     private static final String QQ = "com.tencent.mobileqq";
@@ -42,9 +42,7 @@ public class MainHook implements IXposedHookLoadPackage {
             systemContext.registerReceiver(new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    isWeixin = intent.getExtras().getBoolean("weixin", true);
-                    isQQ = intent.getExtras().getBoolean("qq", true);
-                    m = intent.getExtras().getInt("magnification", 1000);
+                    getKey();
                 }
             }, intentFilter);
 
@@ -61,7 +59,7 @@ public class MainHook implements IXposedHookLoadPackage {
                         return;
                     }
                     XposedBridge.log("传感器类型: " + ss.getType() + " 名称:" + ss.getName());
-                    if (ss.getType() == Sensor.TYPE_STEP_COUNTER||ss.getType() == Sensor.TYPE_STEP_DETECTOR) {
+                    if (ss.getType() == Sensor.TYPE_STEP_COUNTER || ss.getType() == Sensor.TYPE_STEP_DETECTOR) {
                         XposedBridge.log("当前设置weixin: " + isWeixin + ",qq:" + isQQ + ",m=" + m + ",packagename:" + loadPackageParam.packageName);
                         if (isWeixin && loadPackageParam.packageName.equals(WEXIN)) {
                             ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] + m * WechatStepCount;
@@ -80,11 +78,15 @@ public class MainHook implements IXposedHookLoadPackage {
     }
 
     private void getKey() {
-        sharedPreferences = new XSharedPreferences(BuildConfig.APPLICATION_ID);
-        sharedPreferences.makeWorldReadable();
         sharedPreferences.reload();
+        XposedBridge.log("设置路径：" + sharedPreferences.getFile().getAbsolutePath() + ",是否可读：" + sharedPreferences.getFile().canRead());
         isWeixin = sharedPreferences.getBoolean("weixin", true);
         isQQ = sharedPreferences.getBoolean("qq", true);
         m = Integer.valueOf(sharedPreferences.getString("magnification", "1000"));
+    }
+
+    @Override
+    public void initZygote(StartupParam startupParam) throws Throwable {
+        sharedPreferences = new XSharedPreferences(BuildConfig.APPLICATION_ID);
     }
 }
