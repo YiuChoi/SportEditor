@@ -41,7 +41,8 @@ public class SettingFragment extends PreferenceFragment implements Preference.On
 
     public void getKey() {
         Intent intent = new Intent(SETTING_CHANGED);
-        getActivity().sendBroadcast(intent);
+        if (isAdded())
+            getActivity().sendBroadcast(intent);
     }
 
     private void changeSummary() {
