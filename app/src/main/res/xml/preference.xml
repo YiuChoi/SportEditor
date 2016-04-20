@@ -12,10 +12,10 @@
         android:summaryOn="开启"
         android:title="QQ健康步数修改"/>
     <EditTextPreference
-        android:defaultValue="1000"
+        android:defaultValue="100"
         android:inputType="number"
         android:key="magnification"
-        android:summary="1000"
+        android:summary="100"
         android:title="修改倍率"/>
     <Preference android:title="支付宝捐赠">
         <intent

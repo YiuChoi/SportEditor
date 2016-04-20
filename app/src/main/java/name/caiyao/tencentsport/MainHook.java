@@ -58,16 +58,16 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                         XposedBridge.log("传感器为NULL");
                         return;
                     }
-                    XposedBridge.log("传感器类型: " + ss.getType() + " 名称:" + ss.getName());
                     if (ss.getType() == Sensor.TYPE_STEP_COUNTER || ss.getType() == Sensor.TYPE_STEP_DETECTOR) {
+                        XposedBridge.log("传感器类型: " + ss.getType() + " 名称:" + ss.getName());
                         XposedBridge.log("当前设置weixin: " + isWeixin + ",qq:" + isQQ + ",m=" + m + ",packagename:" + loadPackageParam.packageName);
                         if (isWeixin && loadPackageParam.packageName.equals(WEXIN)) {
-                            ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] + m * WechatStepCount;
+                            ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * m; //* WechatStepCount;
                             WechatStepCount += 1;
                             XposedBridge.log("微信计步器步数修改后   SensorEvent: x=" + ((float[]) param.args[1])[0]);
                         }
                         if (isQQ && loadPackageParam.packageName.equals(QQ)) {
-                            ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] + m * QQStepCount;
+                            ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * m; //* QQStepCount;
                             QQStepCount += 1;
                             XposedBridge.log("QQ计步器步数修改后   SensorEvent: x=" + ((float[]) param.args[1])[0]);
                         }
@@ -82,7 +82,7 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
         XposedBridge.log("设置路径：" + sharedPreferences.getFile().getAbsolutePath() + ",是否可读：" + sharedPreferences.getFile().canRead());
         isWeixin = sharedPreferences.getBoolean("weixin", true);
         isQQ = sharedPreferences.getBoolean("qq", true);
-        m = Integer.valueOf(sharedPreferences.getString("magnification", "1000"));
+        m = Integer.valueOf(sharedPreferences.getString("magnification", "100"));
     }
 
     @Override
