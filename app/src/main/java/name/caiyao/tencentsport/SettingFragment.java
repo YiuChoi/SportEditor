@@ -10,7 +10,7 @@ import android.preference.PreferenceFragment;
 
 public class SettingFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
-    EditTextPreference editTextPreference;
+    EditTextPreference mEditTextPreference, maxditTextPreference;
     public final String SETTING_CHANGED = "name.caiyao.tencentsport.SETTING_CHANGED";
 
     public SettingFragment() {
@@ -27,10 +27,8 @@ public class SettingFragment extends PreferenceFragment implements Preference.On
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        //findPreference("weixin").setOnPreferenceChangeListener(this);
-        //findPreference("qq").setOnPreferenceChangeListener(this);
-        editTextPreference = (EditTextPreference) findPreference("magnification");
-        //editTextPreference.setOnPreferenceChangeListener(this);
+        mEditTextPreference = (EditTextPreference) findPreference("magnification");
+        maxditTextPreference = (EditTextPreference) findPreference("max");
         changeSummary();
     }
 
@@ -47,7 +45,8 @@ public class SettingFragment extends PreferenceFragment implements Preference.On
     }
 
     private void changeSummary() {
-        editTextPreference.setSummary(getPreferenceManager().getSharedPreferences().getString("magnification", "1000"));
+        mEditTextPreference.setSummary(getPreferenceManager().getSharedPreferences().getString("magnification", "1000"));
+        maxditTextPreference.setSummary(getPreferenceManager().getSharedPreferences().getString("max", "100000"));
     }
 
     @Override

@@ -25,11 +25,10 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
     public final String SETTING_CHANGED = "name.caiyao.tencentsport.SETTING_CHANGED";
     private static final String WEXIN = "com.tencent.mm";
     private static final String QQ = "com.tencent.mobileqq";
-    static int QQStepCount = 0;
-    static boolean isWeixin, isQQ;
+    static int stepCount = 0;
+    static boolean isWeixin, isQQ, isAuto;
     XSharedPreferences sharedPreferences;
-    static int m;
-    static int WechatStepCount = 0;
+    static int m, max;
 
     @Override
     public void handleLoadPackage(final XC_LoadPackage.LoadPackageParam loadPackageParam) throws Throwable {
@@ -60,16 +59,17 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                     }
                     if (ss.getType() == Sensor.TYPE_STEP_COUNTER || ss.getType() == Sensor.TYPE_STEP_DETECTOR) {
                         XposedBridge.log("传感器类型: " + ss.getType() + " 名称:" + ss.getName());
-                        XposedBridge.log("当前设置weixin: " + isWeixin + ",qq:" + isQQ + ",m=" + m + ",packagename:" + loadPackageParam.packageName);
-                        if (isWeixin && loadPackageParam.packageName.equals(WEXIN)) {
-                            ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * m; //* WechatStepCount;
-                            WechatStepCount += 1;
-                            XposedBridge.log("微信计步器步数修改后   SensorEvent: x=" + ((float[]) param.args[1])[0]);
-                        }
-                        if (isQQ && loadPackageParam.packageName.equals(QQ)) {
-                            ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * m; //* QQStepCount;
-                            QQStepCount += 1;
-                            XposedBridge.log("QQ计步器步数修改后   SensorEvent: x=" + ((float[]) param.args[1])[0]);
+                        XposedBridge.log("当前设置weixin: " + isWeixin + ",qq:" + isQQ + ",m=" + m + ",auto:" + isAuto + ",max:" + max);
+                        if ((isWeixin && loadPackageParam.packageName.equals(WEXIN)) || (isQQ && loadPackageParam.packageName.equals(QQ))) {
+                            if (isAuto) {
+                                if (m * stepCount < max) {
+                                    ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] + m * stepCount;
+                                    stepCount += 1;
+                                }
+                            } else {
+                                ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * m;
+                            }
+                            XposedBridge.log(loadPackageParam.packageName + "计步器步数修改后   SensorEvent: x=" + ((float[]) param.args[1])[0]);
                         }
                     }
                 }
@@ -83,6 +83,8 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
         isWeixin = sharedPreferences.getBoolean("weixin", true);
         isQQ = sharedPreferences.getBoolean("qq", true);
         m = Integer.valueOf(sharedPreferences.getString("magnification", "100"));
+        isAuto = sharedPreferences.getBoolean("autoincrement", false);
+        max = Integer.valueOf(sharedPreferences.getString("max", "100000"));
     }
 
     @Override
