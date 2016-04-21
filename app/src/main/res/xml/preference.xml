@@ -29,12 +29,6 @@
         android:key="max"
         android:summary="100000"
         android:title="自动增加上限"/>
-    <CheckBoxPreference
-        android:defaultValue="false"
-        android:key="icon"
-        android:summaryOff="隐藏图标"
-        android:summaryOn="显示图标"
-        android:title="桌面图标"/>
     <Preference
         android:summary="自动增加=步数+自增变量*倍率，到自增上限后停止插件功能，倍率增加=步数*倍率，无限制。\n注意：使用自动增加可能导致QQ不刷新，请自行测试！"
         android:title="使用说明"/>

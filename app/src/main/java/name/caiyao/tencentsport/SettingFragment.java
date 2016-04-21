@@ -1,10 +1,8 @@
 package name.caiyao.tencentsport;
 
 
-import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
@@ -60,20 +58,7 @@ public class SettingFragment extends PreferenceFragment implements Preference.On
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals("icon")) {
-            changeIcon(sharedPreferences.getBoolean("icon", false));
-        }
         changeSummary();
         getKey();
-    }
-
-    private void changeIcon(boolean isShow) {
-        PackageManager packageManager = getActivity().getPackageManager();
-        ComponentName componentName = new ComponentName(getActivity().getPackageName(), getActivity().getPackageName() + ".MainActivity");
-        if (!isShow)
-            packageManager.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
-        else
-            packageManager.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
-
     }
 }
