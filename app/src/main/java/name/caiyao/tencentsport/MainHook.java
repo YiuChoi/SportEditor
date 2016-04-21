@@ -32,19 +32,23 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 
     @Override
     public void handleLoadPackage(final XC_LoadPackage.LoadPackageParam loadPackageParam) throws Throwable {
+        final Object activityThread = XposedHelpers.callStaticMethod(XposedHelpers.findClass("android.app.ActivityThread", null), "currentActivityThread");
+        final Context systemContext = (Context) XposedHelpers.callMethod(activityThread, "getSystemContext");
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(SETTING_CHANGED);
+        systemContext.registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                isWeixin = intent.getExtras().getBoolean("weixin", true);
+                isQQ = intent.getExtras().getBoolean("qq", true);
+                m = Integer.valueOf(intent.getExtras().getString("magnification", "100"));
+                isAuto = intent.getExtras().getBoolean("autoincrement", false);
+                max = Integer.valueOf(intent.getExtras().getString("max", "100000"));
+            }
+        }, intentFilter);
+
         if (loadPackageParam.packageName.equals(WEXIN) || loadPackageParam.packageName.equals(QQ)) {
             getKey();
-            final Object activityThread = XposedHelpers.callStaticMethod(XposedHelpers.findClass("android.app.ActivityThread", null), "currentActivityThread");
-            final Context systemContext = (Context) XposedHelpers.callMethod(activityThread, "getSystemContext");
-            IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction(SETTING_CHANGED);
-            systemContext.registerReceiver(new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    getKey();
-                }
-            }, intentFilter);
-
             final Class<?> sensorEL = XposedHelpers.findClass("android.hardware.SystemSensorManager$SensorEventQueue", loadPackageParam.classLoader);
             XposedBridge.hookAllMethods(sensorEL, "dispatchSensorEvent", new XC_MethodHook() {
                 @Override
