@@ -2,40 +2,48 @@
     <CheckBoxPreference
         android:defaultValue="false"
         android:key="autoincrement"
-        android:title="修改方式"
         android:summaryOff="倍率增加"
-        android:summaryOn="自动增加" />
+        android:summaryOn="自动增加"
+        android:title="修改方式"/>
     <CheckBoxPreference
         android:defaultValue="true"
         android:key="weixin"
         android:summaryOff="关闭"
         android:summaryOn="开启"
-        android:title="微信运动修改" />
+        android:title="微信运动修改"/>
     <CheckBoxPreference
         android:defaultValue="true"
         android:key="qq"
         android:summaryOff="关闭"
         android:summaryOn="开启"
-        android:title="QQ健康步数修改" />
+        android:title="QQ健康步数修改"/>
     <EditTextPreference
         android:defaultValue="100"
         android:inputType="number"
         android:key="magnification"
         android:summary="100"
-        android:title="倍率" />
+        android:title="倍率"/>
     <EditTextPreference
         android:defaultValue="100000"
         android:inputType="number"
         android:key="max"
-        android:title="自增上限" />
-    <Preference android:title="支付宝捐赠">
+        android:summary="100000"
+        android:title="自动增加上限"/>
+    <Preference
+        android:summary="自动增加=步数+自增变量*倍率，到自增上限后停止插件功能，倍率增加=步数*倍率，无限制。\n注意：使用自动增加可能导致QQ不刷新，请自行测试！"
+        android:title="使用说明"
+        />
+    <Preference
+        android:summary="喜欢我的作品就请我吃辣条吧，O(∩_∩)O哈哈~"
+        android:title="支付宝捐赠"
+        >
         <intent
             android:action="android.intent.action.VIEW"
-            android:data="http://caiyao.name/releases" />
+            android:data="http://caiyao.name/releases"/>
     </Preference>
     <Preference android:title="关于">
         <intent
             android:action="android.intent.action.VIEW"
-            android:data="http://caiyao.name/releases" />
+            android:data="http://caiyao.name/releases"/>
     </Preference>
 </PreferenceScreen>

@@ -65,6 +65,8 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                                 if (m * stepCount < max) {
                                     ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] + m * stepCount;
                                     stepCount += 1;
+                                } else {
+                                    stepCount = 0;
                                 }
                             } else {
                                 ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * m;
