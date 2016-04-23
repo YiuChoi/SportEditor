@@ -36,7 +36,7 @@
             android:summaryOn="打开"
             android:title="悦动圈步数修改"/>
         <Preference
-            android:summary="倍率*步数，其他计步软件若手机无计步器，则为自动刷步，与倍率无关"
+            android:summary="倍率*步数，若手机无计步器，则为自动刷步，与倍率无关"
             android:title="使用说明"/>
     </PreferenceCategory>
 
