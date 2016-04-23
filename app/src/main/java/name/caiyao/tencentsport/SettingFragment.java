@@ -52,7 +52,8 @@ public class SettingFragment extends PreferenceFragment implements Preference.On
     }
 
     private void changeSummary() {
-        mEditTextPreference.setSummary(getPreferenceManager().getSharedPreferences().getString("magnification", "1000"));
+        if (mEditTextPreference != null)
+            mEditTextPreference.setSummary(getPreferenceManager().getSharedPreferences().getString("magnification", "1000"));
     }
 
     @Override
