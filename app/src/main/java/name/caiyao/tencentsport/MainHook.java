@@ -45,7 +45,6 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                 isQQ = intent.getExtras().getBoolean("qq", true);
                 m = Integer.valueOf(intent.getExtras().getString("magnification", "100"));
                 isAuto = intent.getExtras().getBoolean("autoincrement", false);
-                max = Integer.valueOf(intent.getExtras().getString("max", "100000"));
                 isLedong = intent.getExtras().getBoolean("ledong", true);
                 isYuedong = intent.getExtras().getBoolean("yuedong", true);
 
@@ -69,11 +68,12 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                     if (ss.getType() == Sensor.TYPE_ACCELEROMETER) {
                         if (isLedong && loadPackageParam.packageName.equals(LEDONG)) {
                             ledongCount += 1;
-                            ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * 1000;
                             if (weixinCount % 2 == 0) {
+                                ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * 10;
                                 ((float[]) param.args[1])[2] += (float) -20;
                                 ((float[]) param.args[1])[1] += (float) -5;
                             } else {
+                                ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * 1000;
                                 ((float[]) param.args[1])[2] += (float) 20;
                                 ((float[]) param.args[1])[1] += (float) -15;
                             }
@@ -118,6 +118,7 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                         if ((isYuedong && loadPackageParam.packageName.equals(YUEDONG)) || (isLedong && loadPackageParam.packageName.equals(LEDONG))) {
                             ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * m;
                         }
+                        XposedBridge.log(loadPackageParam.packageName + "修改后：" + ((float[]) param.args[1])[0]);
                     }
                 }
             });
