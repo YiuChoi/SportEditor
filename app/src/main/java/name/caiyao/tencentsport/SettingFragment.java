@@ -10,7 +10,7 @@ import android.preference.PreferenceFragment;
 
 public class SettingFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
-    EditTextPreference mEditTextPreference, maxditTextPreference;
+    EditTextPreference mEditTextPreference;
     public final String SETTING_CHANGED = "name.caiyao.tencentsport.SETTING_CHANGED";
 
     public SettingFragment() {
@@ -28,7 +28,6 @@ public class SettingFragment extends PreferenceFragment implements Preference.On
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mEditTextPreference = (EditTextPreference) findPreference("magnification");
-        maxditTextPreference = (EditTextPreference) findPreference("max");
         changeSummary();
     }
 
@@ -41,11 +40,12 @@ public class SettingFragment extends PreferenceFragment implements Preference.On
 
     public void getKey() {
         Intent intent = new Intent(SETTING_CHANGED);
-        intent.putExtra("weixin", (getPreferenceManager().getSharedPreferences().getBoolean("weiixn", true)));
-        intent.putExtra("qq", (getPreferenceManager().getSharedPreferences().getBoolean("qq", true)));
-        intent.putExtra("magnification", (getPreferenceManager().getSharedPreferences().getString("magnification", "100")));
-        intent.putExtra("autoincrement", (getPreferenceManager().getSharedPreferences().getBoolean("autoincrement", false)));
-        intent.putExtra("max", (getPreferenceManager().getSharedPreferences().getString("max", "100000")));
+        intent.putExtra("weixin", getPreferenceManager().getSharedPreferences().getBoolean("weiixn", true));
+        intent.putExtra("qq", getPreferenceManager().getSharedPreferences().getBoolean("qq", true));
+        intent.putExtra("magnification", getPreferenceManager().getSharedPreferences().getString("magnification", "100"));
+        intent.putExtra("autoincrement", getPreferenceManager().getSharedPreferences().getBoolean("autoincrement", false));
+        intent.putExtra("ledong", getPreferenceManager().getSharedPreferences().getBoolean("ledong", true));
+        intent.putExtra("yuedong", getPreferenceManager().getSharedPreferences().getBoolean("yuedong", true));
         if (getActivity() != null) {
             getActivity().sendBroadcast(intent);
         }
@@ -53,7 +53,6 @@ public class SettingFragment extends PreferenceFragment implements Preference.On
 
     private void changeSummary() {
         mEditTextPreference.setSummary(getPreferenceManager().getSharedPreferences().getString("magnification", "1000"));
-        maxditTextPreference.setSummary(getPreferenceManager().getSharedPreferences().getString("max", "100000"));
     }
 
     @Override
