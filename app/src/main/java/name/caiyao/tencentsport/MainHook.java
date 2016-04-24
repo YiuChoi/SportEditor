@@ -30,7 +30,7 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
     static int weixinCount = 0, qqCount = 0, ledongCount = 0, yuedongCount = 0;
     static boolean isWeixin, isQQ, isAuto, isLedong, isYuedong;
     XSharedPreferences sharedPreferences;
-    static int m, max = 1000000000;
+    static int m, max = Integer.MAX_VALUE;
 
     @Override
     public void handleLoadPackage(final XC_LoadPackage.LoadPackageParam loadPackageParam) throws Throwable {
@@ -69,11 +69,11 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                         if (isLedong && loadPackageParam.packageName.equals(LEDONG)) {
                             ledongCount += 1;
                             if (weixinCount % 2 == 0) {
-                                ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * 10;
+                                ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * 100;
                                 ((float[]) param.args[1])[2] += (float) -20;
                                 ((float[]) param.args[1])[1] += (float) -5;
                             } else {
-                                ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * 1000;
+                                ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * 10;
                                 ((float[]) param.args[1])[2] += (float) 20;
                                 ((float[]) param.args[1])[1] += (float) -15;
                             }
