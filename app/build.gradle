@@ -8,8 +8,8 @@ android {
         applicationId "name.caiyao.tencentsport"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 3
-        versionName "1.2.0 beta"
+        versionCode 4
+        versionName "1.2.0"
     }
     buildTypes {
         release {
