@@ -68,7 +68,7 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                     if (ss.getType() == Sensor.TYPE_ACCELEROMETER) {
                         if (isLedong && loadPackageParam.packageName.equals(LEDONG)) {
                             ledongCount += 1;
-                            if (weixinCount % 2 == 0) {
+                            if (ledongCount % 2 == 0) {
                                 ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * 100;
                                 ((float[]) param.args[1])[2] += (float) -20;
                                 ((float[]) param.args[1])[1] += (float) -5;
