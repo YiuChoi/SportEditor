@@ -58,7 +58,7 @@
                 android:data="https://qr.alipay.com/apoy1zw1o2xpc7915d"/>
         </Preference>
         <Preference android:title="关于"
-            android:summary="1.2.0 beta"
+            android:summary="1.2.0"
             >
             <intent
                 android:action="android.intent.action.VIEW"

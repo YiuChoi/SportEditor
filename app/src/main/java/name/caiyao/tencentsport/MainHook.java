@@ -116,7 +116,10 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                             }
                         }
                         if ((isYuedong && loadPackageParam.packageName.equals(YUEDONG)) || (isLedong && loadPackageParam.packageName.equals(LEDONG))) {
-                            ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * m;
+                            if (((float[]) param.args[1])[0] * m < 99998)
+                                ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * m;
+                            else
+                                ((float[]) param.args[1])[0] = 99998;
                         }
                         XposedBridge.log(loadPackageParam.packageName + "修改后：" + ((float[]) param.args[1])[0]);
                     }
