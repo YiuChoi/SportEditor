@@ -118,11 +118,13 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                         if ((isYuedong && loadPackageParam.packageName.equals(YUEDONG)) || (isLedong && loadPackageParam.packageName.equals(LEDONG))) {
                             if (((float[]) param.args[1])[0] * m < 99998)
                                 ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * m;
-                            else
+                            else {
+                                m = 0;
                                 ((float[]) param.args[1])[0] = 99998;
+                            }
                         }
-                        XposedBridge.log(loadPackageParam.packageName + "修改后：" + ((float[]) param.args[1])[0]);
                     }
+                    XposedBridge.log(loadPackageParam.packageName + "传感器类型：" + ss.getType() + ",修改后：" + ((float[]) param.args[1])[0]);
                 }
             });
         }
