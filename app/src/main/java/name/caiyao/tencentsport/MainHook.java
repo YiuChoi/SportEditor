@@ -87,9 +87,7 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                 @Override
                 protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                     int handle = (Integer) param.args[0];
-                    if (loadPackageParam.packageName.equals(YUEDONG) && sObject == null) {
-                        sObject = param.thisObject;
-                    }
+                    sObject = param.thisObject;
                     Field field = param.thisObject.getClass().getDeclaredField("mSensorsEvents");
                     field.setAccessible(true);
                     Sensor ss = ((SparseArray<SensorEvent>) field.get(param.thisObject)).get(handle).sensor;
