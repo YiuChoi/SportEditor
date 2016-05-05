@@ -28,9 +28,13 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
     private static final String YUEDONG = "com.yuedong.sport";
     private static final String LEDONG = "cn.ledongli.ldl";
     static int weixinCount = 0, qqCount = 0, ledongCount = 0, yuedongCount = 0;
+    static float count = 0;
     static boolean isWeixin, isQQ, isAuto, isLedong, isYuedong;
     XSharedPreferences sharedPreferences;
     static int m, max = Integer.MAX_VALUE;
+    Thread autoThread;
+
+    static Object sObject;
 
     @Override
     public void handleLoadPackage(final XC_LoadPackage.LoadPackageParam loadPackageParam) throws Throwable {
@@ -51,13 +55,41 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
             }
         }, intentFilter);
 
-        if (loadPackageParam.packageName.equals(WEXIN) || loadPackageParam.packageName.equals(QQ) || loadPackageParam.packageName.equals(YUEDONG) || loadPackageParam.packageName.equals(LEDONG)) {
+        if (loadPackageParam.packageName.equals(YUEDONG)) {
+            autoThread = new Thread() {
+                @Override
+                public void run() {
+                    while (!isInterrupted()) {
+                        if (isYuedong) {
+                            try {
+                                Thread.sleep(100);
+                                if (sObject != null) {
+                                    count++;
+                                    XposedHelpers.callMethod(sObject, "dispatchSensorEvent", 5, new float[]{count, 0, 0}, 3, System.currentTimeMillis());
+                                }
+                                if (count == Integer.MAX_VALUE) {
+                                    count = 0;
+                                }
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }
+            };
+            autoThread.start();
+        }
+
+        if (loadPackageParam.packageName.equals(WEXIN) || loadPackageParam.packageName.equals(QQ) || loadPackageParam.packageName.equals(LEDONG) || loadPackageParam.packageName.equals(YUEDONG)) {
             getKey();
             final Class<?> sensorEL = XposedHelpers.findClass("android.hardware.SystemSensorManager$SensorEventQueue", loadPackageParam.classLoader);
             XposedBridge.hookAllMethods(sensorEL, "dispatchSensorEvent", new XC_MethodHook() {
                 @Override
                 protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                     int handle = (Integer) param.args[0];
+                    if (loadPackageParam.packageName.equals(YUEDONG) && sObject == null) {
+                        sObject = param.thisObject;
+                    }
                     Field field = param.thisObject.getClass().getDeclaredField("mSensorsEvents");
                     field.setAccessible(true);
                     Sensor ss = ((SparseArray<SensorEvent>) field.get(param.thisObject)).get(handle).sensor;
@@ -113,14 +145,6 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                                 }
                             } else {
                                 ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * m;
-                            }
-                        }
-                        if ((isYuedong && loadPackageParam.packageName.equals(YUEDONG)) || (isLedong && loadPackageParam.packageName.equals(LEDONG))) {
-                            if (((float[]) param.args[1])[0] * m < 99998)
-                                ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * m;
-                            else {
-                                m = 0;
-                                ((float[]) param.args[1])[0] = 99998;
                             }
                         }
                     }
