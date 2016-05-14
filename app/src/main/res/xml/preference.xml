@@ -35,6 +35,12 @@
             android:summaryOff="关闭"
             android:summaryOn="打开"
             android:title="悦动圈步数修改"/>
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="pingan"
+            android:summaryOff="关闭"
+            android:summaryOn="打开"
+            android:title="平安好医生步数修改"/>
         <Preference
             android:summary="倍率*步数，若手机无计步器，则为自动刷步，与倍率无关。悦动圈无法翻倍，只能自动刷。"
             android:title="使用说明"/>
@@ -58,7 +64,7 @@
                 android:data="https://qr.alipay.com/apoy1zw1o2xpc7915d"/>
         </Preference>
         <Preference android:title="关于"
-            android:summary="1.2.1"
+            android:summary="1.2.2 测试版"
             >
             <intent
                 android:action="android.intent.action.VIEW"

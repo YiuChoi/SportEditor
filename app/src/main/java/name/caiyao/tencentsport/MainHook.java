@@ -27,9 +27,10 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
     private static final String QQ = "com.tencent.mobileqq";
     private static final String YUEDONG = "com.yuedong.sport";
     private static final String LEDONG = "cn.ledongli.ldl";
-    static int weixinCount = 0, qqCount = 0, ledongCount = 0, yuedongCount = 0;
+    private static final String PINGAN = "com.pingan.papd";
+    static int weixinCount = 0, qqCount = 0, ledongCount = 0, yuedongCount = 0, pinganCount = 0;
     static float count = 0;
-    static boolean isWeixin, isQQ, isAuto, isLedong, isYuedong;
+    static boolean isWeixin, isQQ, isAuto, isLedong, isYuedong,isPingan;
     XSharedPreferences sharedPreferences;
     static int m, max = Integer.MAX_VALUE;
     Thread autoThread;
@@ -51,6 +52,7 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                 isAuto = intent.getExtras().getBoolean("autoincrement", false);
                 isLedong = intent.getExtras().getBoolean("ledong", true);
                 isYuedong = intent.getExtras().getBoolean("yuedong", true);
+                isPingan = intent.getExtras().getBoolean("pingan", true);
 
             }
         }, intentFilter);
@@ -80,7 +82,7 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
             autoThread.start();
         }
 
-        if (loadPackageParam.packageName.equals(WEXIN) || loadPackageParam.packageName.equals(QQ) || loadPackageParam.packageName.equals(LEDONG) || loadPackageParam.packageName.equals(YUEDONG)) {
+        if (loadPackageParam.packageName.equals(PINGAN) || loadPackageParam.packageName.equals(WEXIN) || loadPackageParam.packageName.equals(QQ) || loadPackageParam.packageName.equals(LEDONG) || loadPackageParam.packageName.equals(YUEDONG)) {
             getKey();
             final Class<?> sensorEL = XposedHelpers.findClass("android.hardware.SystemSensorManager$SensorEventQueue", loadPackageParam.classLoader);
             XposedBridge.hookAllMethods(sensorEL, "dispatchSensorEvent", new XC_MethodHook() {
@@ -112,6 +114,17 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                             yuedongCount += 1;
                             ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * 1000;
                             if (yuedongCount % 2 == 0) {
+                                ((float[]) param.args[1])[2] += (float) -20;
+                                ((float[]) param.args[1])[1] += (float) -5;
+                            } else {
+                                ((float[]) param.args[1])[2] += (float) 20;
+                                ((float[]) param.args[1])[1] += (float) -15;
+                            }
+                        }
+                        if (isPingan && loadPackageParam.packageName.equals(PINGAN)) {
+                            pinganCount += 1;
+                            ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * 1000;
+                            if (pinganCount % 2 == 0) {
                                 ((float[]) param.args[1])[2] += (float) -20;
                                 ((float[]) param.args[1])[1] += (float) -5;
                             } else {
@@ -160,6 +173,7 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
         isAuto = sharedPreferences.getBoolean("autoincrement", false);
         isLedong = sharedPreferences.getBoolean("ledong", true);
         isYuedong = sharedPreferences.getBoolean("yuedong", true);
+        isPingan = sharedPreferences.getBoolean("pingan", true);
     }
 
     @Override
