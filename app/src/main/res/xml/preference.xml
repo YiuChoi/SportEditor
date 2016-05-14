@@ -64,8 +64,7 @@
                 android:data="https://qr.alipay.com/apoy1zw1o2xpc7915d"/>
         </Preference>
         <Preference android:title="关于"
-            android:summary="1.2.2 测试版"
-            >
+            android:summary="1.2.2 测试版">
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="http://caiyao.name/releases"/>
