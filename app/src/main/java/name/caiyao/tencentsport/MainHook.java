@@ -57,12 +57,12 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
             }
         }, intentFilter);
 
-        if (loadPackageParam.packageName.equals(YUEDONG)) {
+        if (loadPackageParam.packageName.equals(YUEDONG)||loadPackageParam.packageName.equals(QQ)) {
             autoThread = new Thread() {
                 @Override
                 public void run() {
                     while (!isInterrupted()) {
-                        if (isYuedong) {
+                        if (isYuedong||isQQ) {
                             try {
                                 Thread.sleep(100);
                                 if (sObject != null) {
@@ -146,20 +146,20 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                                 ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * m;
                             }
                         }
-                        if ((isQQ && loadPackageParam.packageName.equals(QQ))) {
-                            if (isAuto) {
-                                if (m * qqCount < max) {
-                                    ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] + m * qqCount;
-                                    qqCount += 1;
-                                } else {
-                                    qqCount = 0;
-                                }
-                            } else {
-                                ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * m;
-                            }
-                        }
+//                        if ((isQQ && loadPackageParam.packageName.equals(QQ))) {
+//                            if (isAuto) {
+//                                if (m * qqCount < max) {
+//                                    ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] + m * qqCount;
+//                                    qqCount += 1;
+//                                } else {
+//                                    qqCount = 0;
+//                                }
+//                            } else {
+//                                ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * m;
+//                            }
+//                        }
+                        XposedBridge.log(loadPackageParam.packageName + "传感器类型：" + ss.getType() + ",修改后：" + ((float[]) param.args[1])[0]);
                     }
-                    //XposedBridge.log(loadPackageParam.packageName + "传感器类型：" + ss.getType() + ",修改后：" + ((float[]) param.args[1])[0]);
                 }
             });
         }
