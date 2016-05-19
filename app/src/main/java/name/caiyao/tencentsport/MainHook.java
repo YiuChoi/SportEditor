@@ -22,26 +22,25 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
  * Created by 蔡小木 on 2016/2/16 0016.
  */
 public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
-    public final String SETTING_CHANGED = "name.caiyao.tencentsport.SETTING_CHANGED";
     private static final String WEXIN = "com.tencent.mm";
     private static final String QQ = "com.tencent.mobileqq";
     private static final String YUEDONG = "com.yuedong.sport";
     private static final String LEDONG = "cn.ledongli.ldl";
     private static final String PINGAN = "com.pingan.papd";
-    static int weixinCount = 0, qqCount = 0, ledongCount = 0, yuedongCount = 0, pinganCount = 0;
-    static float count = 0;
-    static boolean isWeixin, isQQ, isAuto, isLedong, isYuedong, isPingan;
-    XSharedPreferences sharedPreferences;
-    static int m, max = Integer.MAX_VALUE;
-    Thread autoThread;
+    private static int weixinCount = 0, qqCount = 0, ledongCount = 0, yuedongCount = 0, pinganCount = 0;
+    private static float count = 0;
+    private static boolean isWeixin, isQQ, isAuto, isLedong, isYuedong, isPingan;
+    private XSharedPreferences sharedPreferences;
+    private static int m, max = Integer.MAX_VALUE;
 
-    static Object sObject;
+    private static Object sObject;
 
     @Override
     public void handleLoadPackage(final XC_LoadPackage.LoadPackageParam loadPackageParam) throws Throwable {
         final Object activityThread = XposedHelpers.callStaticMethod(XposedHelpers.findClass("android.app.ActivityThread", null), "currentActivityThread");
         final Context systemContext = (Context) XposedHelpers.callMethod(activityThread, "getSystemContext");
         IntentFilter intentFilter = new IntentFilter();
+        String SETTING_CHANGED = "name.caiyao.tencentsport.SETTING_CHANGED";
         intentFilter.addAction(SETTING_CHANGED);
         systemContext.registerReceiver(new BroadcastReceiver() {
             @Override
@@ -58,7 +57,7 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
         }, intentFilter);
 
         if (loadPackageParam.packageName.equals(YUEDONG)) {
-            autoThread = new Thread() {
+            Thread autoThread = new Thread() {
                 @Override
                 public void run() {
                     while (!isInterrupted()) {
