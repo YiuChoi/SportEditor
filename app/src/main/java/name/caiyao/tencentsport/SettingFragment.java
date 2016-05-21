@@ -1,8 +1,10 @@
 package name.caiyao.tencentsport;
 
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
@@ -10,8 +12,7 @@ import android.preference.PreferenceFragment;
 
 public class SettingFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
-    EditTextPreference mEditTextPreference;
-    public final String SETTING_CHANGED = "name.caiyao.tencentsport.SETTING_CHANGED";
+    private EditTextPreference mEditTextPreference;
 
     public SettingFragment() {
     }
@@ -38,7 +39,8 @@ public class SettingFragment extends PreferenceFragment implements Preference.On
         return true;
     }
 
-    public void getKey() {
+    private void getKey() {
+        String SETTING_CHANGED = "name.caiyao.tencentsport.SETTING_CHANGED";
         Intent intent = new Intent(SETTING_CHANGED);
         intent.putExtra("weixin", getPreferenceManager().getSharedPreferences().getBoolean("weiixn", true));
         intent.putExtra("qq", getPreferenceManager().getSharedPreferences().getBoolean("qq", true));
@@ -50,6 +52,14 @@ public class SettingFragment extends PreferenceFragment implements Preference.On
         if (getActivity() != null) {
             getActivity().sendBroadcast(intent);
         }
+        boolean enabled = getPreferenceManager().getSharedPreferences().getBoolean("icon", true);
+        int state;
+        if (enabled) {
+            state = PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
+        } else {
+            state = PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
+        }
+        getActivity().getPackageManager().setComponentEnabledSetting(new ComponentName(getActivity(), "name.caiyao.sporteditor.SettingsActivity-Alias"), state, 1);
     }
 
     private void changeSummary() {

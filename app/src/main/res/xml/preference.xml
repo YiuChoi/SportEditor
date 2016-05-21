@@ -53,6 +53,12 @@
             android:key="magnification"
             android:summary="100"
             android:title="倍率"/>
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="icon"
+            android:summaryOff="不显示"
+            android:summaryOn="显示"
+            android:title="是否显示图标"/>
         <Preference
             android:summary="倍率仅代表修改幅度，不精确修改数值"
             android:title="使用说明"/>
@@ -63,8 +69,9 @@
                 android:action="android.intent.action.VIEW"
                 android:data="https://qr.alipay.com/apoy1zw1o2xpc7915d"/>
         </Preference>
-        <Preference android:title="关于"
-            android:summary="1.2.2 测试版">
+        <Preference
+            android:summary="1.2.3 测试版"
+            android:title="关于">
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="http://caiyao.name/releases"/>
