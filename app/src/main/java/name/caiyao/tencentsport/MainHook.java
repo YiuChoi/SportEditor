@@ -9,7 +9,6 @@ import android.hardware.SensorEvent;
 import android.util.SparseArray;
 
 import java.lang.reflect.Field;
-import java.util.Random;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
@@ -100,16 +99,19 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                     if (ss.getType() == Sensor.TYPE_ACCELEROMETER) {
                         if (isLedong && loadPackageParam.packageName.equals(LEDONG)) {
                             ledongCount += 1;
-                            if (ledongCount % 2 == 0) {
-                                ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] + new Random().nextFloat() * 1000;
-                                ((float[]) param.args[1])[2] += (float) -25 + new Random().nextFloat() * 10;
-                                ((float[]) param.args[1])[1] += (float) -10 + new Random().nextFloat() * 10;
+                            //完美
+                            if (ledongCount % 3 == 0) {
+                                ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * 100;
+                                ((float[]) param.args[1])[1] += (float) -10;
+                            } else if (ledongCount % 2 == 0) {
+                                ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * 1000;
+                                ((float[]) param.args[1])[2] += (float) -20;
+                                ((float[]) param.args[1])[1] += (float) -5;
                             } else {
-                                ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] + new Random().nextFloat() * 1000;
-                                ((float[]) param.args[1])[2] += (float) 15 + new Random().nextFloat() * 10;
-                                ((float[]) param.args[1])[1] += (float) -10 + new Random().nextFloat() * 10;
+                                ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * 10;
+                                ((float[]) param.args[1])[2] += (float) 20;
+                                ((float[]) param.args[1])[1] += (float) -15;
                             }
-                            XposedBridge.log(loadPackageParam.packageName + "传感器类型：" + ss.getType() + ",修改后：" + ((float[]) param.args[1])[0] + "," + ((float[]) param.args[1])[1] + "," + ((float[]) param.args[1])[0]);
                         }
                         if (isYuedong && loadPackageParam.packageName.equals(YUEDONG)) {
                             yuedongCount += 1;
