@@ -8,8 +8,8 @@ android {
         applicationId "name.caiyao.sporteditor"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 6
-        versionName "1.2.3 beta"
+        versionCode 7
+        versionName "1.2.3"
     }
     buildTypes {
         release {
