@@ -41,6 +41,12 @@
             android:summaryOff="关闭"
             android:summaryOn="打开"
             android:title="平安好医生步数修改"/>
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="codoon"
+            android:summaryOff="关闭"
+            android:summaryOn="打开"
+            android:title="咕咚步数修改"/>
         <Preference
             android:summary="倍率*步数，若手机无计步器，则为自动刷步，与倍率无关。悦动圈无法翻倍，只能自动刷。"
             android:title="使用说明"/>
