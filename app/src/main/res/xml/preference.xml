@@ -76,7 +76,7 @@
                 android:data="https://qr.alipay.com/apoy1zw1o2xpc7915d"/>
         </Preference>
         <Preference
-            android:summary="1.2.3"
+            android:summary="1.2.4"
             android:title="关于">
             <intent
                 android:action="android.intent.action.VIEW"
