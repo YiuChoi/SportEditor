@@ -28,6 +28,7 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
     private static final String LEDONG = "cn.ledongli.ldl";
     private static final String PINGAN = "com.pingan.papd";
     private static final String CODOON = "com.codoon.gps";
+    private static final String POKEMON_GO = "com.nianticlabs.pokemongo";
     private static int weixinCount = 0, qqCount = 0, ledongCount = 0, yuedongCount = 0, pinganCount = 0, codoonCount = 0;
     private static float count = 0;
     private static boolean isWeixin, isQQ, isAuto, isLedong, isYuedong, isPingan, isCodoon = true;
@@ -53,7 +54,7 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                 isLedong = intent.getExtras().getBoolean("ledong", true);
                 isYuedong = intent.getExtras().getBoolean("yuedong", true);
                 isPingan = intent.getExtras().getBoolean("pingan", true);
-                isCodoon = sharedPreferences.getBoolean("codoon",true);
+                isCodoon = sharedPreferences.getBoolean("codoon", true);
             }
         }, intentFilter);
 
@@ -82,7 +83,7 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
             autoThread.start();
         }
 
-        if (loadPackageParam.packageName.equals(PINGAN) || loadPackageParam.packageName.equals(WEXIN) || loadPackageParam.packageName.equals(QQ) || loadPackageParam.packageName.equals(LEDONG) || loadPackageParam.packageName.equals(YUEDONG)||loadPackageParam.packageName.equals(CODOON)) {
+        if (loadPackageParam.packageName.equals(POKEMON_GO) | loadPackageParam.packageName.equals(PINGAN) || loadPackageParam.packageName.equals(WEXIN) || loadPackageParam.packageName.equals(QQ) || loadPackageParam.packageName.equals(LEDONG) || loadPackageParam.packageName.equals(YUEDONG) || loadPackageParam.packageName.equals(CODOON)) {
             getKey();
             final Class<?> sensorEL = XposedHelpers.findClass("android.hardware.SystemSensorManager$SensorEventQueue", loadPackageParam.classLoader);
             XposedBridge.hookAllMethods(sensorEL, "dispatchSensorEvent", new XC_MethodHook() {
@@ -136,7 +137,7 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                                 ((float[]) param.args[1])[1] += (float) -15;
                             }
                         }
-                        if (isCodoon && loadPackageParam.packageName.equals(CODOON)){
+                        if (isCodoon && loadPackageParam.packageName.equals(CODOON)) {
                             codoonCount += 1;
                             ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * 1000;
                             if (codoonCount % 2 == 0) {
@@ -176,6 +177,9 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                         if ((isCodoon && loadPackageParam.packageName.equals(CODOON))) {
                             ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * m;
                         }
+                        if ((loadPackageParam.packageName.equals(POKEMON_GO))) {
+                            ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * m;
+                        }
                         XposedBridge.log(loadPackageParam.packageName + "传感器类型：" + ss.getType() + ",修改后：" + ((float[]) param.args[1])[0]);
                     }
                 }
@@ -192,7 +196,7 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
         isLedong = sharedPreferences.getBoolean("ledong", true);
         isYuedong = sharedPreferences.getBoolean("yuedong", true);
         isPingan = sharedPreferences.getBoolean("pingan", true);
-        isCodoon = sharedPreferences.getBoolean("codoon",true);
+        isCodoon = sharedPreferences.getBoolean("codoon", true);
     }
 
     @Override
