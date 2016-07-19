@@ -57,12 +57,26 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
             }
         }, intentFilter);
 
-        if (loadPackageParam.packageName.equals(YUEDONG)) {
+        if (loadPackageParam.packageName.equals(YUEDONG)||loadPackageParam.packageName.equals(CODOON)) {
             Thread autoThread = new Thread() {
                 @Override
                 public void run() {
                     while (!isInterrupted()) {
                         if (isYuedong) {
+                            try {
+                                Thread.sleep(100);
+                                if (sObject != null) {
+                                    count++;
+                                    XposedHelpers.callMethod(sObject, "dispatchSensorEvent", 5, new float[]{count, 0, 0}, 3, System.currentTimeMillis());
+                                }
+                                if (count == Integer.MAX_VALUE) {
+                                    count = 0;
+                                }
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        if (isCodoon) {
                             try {
                                 Thread.sleep(100);
                                 if (sObject != null) {
@@ -172,9 +186,6 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                             } else {
                                 ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * m;
                             }
-                        }
-                        if ((isCodoon && loadPackageParam.packageName.equals(CODOON))) {
-                            ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * m;
                         }
                         XposedBridge.log(loadPackageParam.packageName + "传感器类型：" + ss.getType() + ",修改后：" + ((float[]) param.args[1])[0]);
                     }
