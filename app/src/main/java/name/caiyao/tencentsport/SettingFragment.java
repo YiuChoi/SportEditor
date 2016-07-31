@@ -29,6 +29,7 @@ public class SettingFragment extends PreferenceFragment implements Preference.On
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mEditTextPreference = (EditTextPreference) findPreference("magnification");
+        findPreference("version").setSummary(BuildConfig.VERSION_NAME);
         changeSummary();
     }
 
@@ -50,6 +51,7 @@ public class SettingFragment extends PreferenceFragment implements Preference.On
         intent.putExtra("yuedong", getPreferenceManager().getSharedPreferences().getBoolean("yuedong", true));
         intent.putExtra("pingan", getPreferenceManager().getSharedPreferences().getBoolean("pingan", true));
         intent.putExtra("codoon", getPreferenceManager().getSharedPreferences().getBoolean("codoon", true));
+        intent.putExtra("weibo", getPreferenceManager().getSharedPreferences().getBoolean("weibo", true));
         if (getActivity() != null) {
             getActivity().sendBroadcast(intent);
         }

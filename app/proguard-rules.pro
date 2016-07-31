@@ -17,3 +17,14 @@
 #}
 -keep public class name.caiyao.tencentsport.MainHook
 -keep public class name.caiyao.tencentsport.SettingFragment{*;}
+-keep public class name.caiyao.sporteditor.R$*{
+public static final int *;
+}
+-keepclassmembers class * {
+   public <init> (org.json.JSONObject);
+}
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
