@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
+import android.os.Handler;
 import android.util.SparseArray;
 
 import java.lang.reflect.Field;
@@ -29,6 +30,8 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
     private static final String PINGAN = "com.pingan.papd";
     private static final String CODOON = "com.codoon.gps";
     private static final String WEIBO = "com.sina.weibo";
+    private static Handler handler = new Handler();
+    Context systemContext;
     private static int weixinCount = 0, qqCount = 0, ledongCount = 0, yuedongCount = 0, pinganCount = 0, codoonCount = 0;
     private static float count = 0;
     private static boolean isWeixin, isQQ, isAuto, isLedong, isYuedong, isPingan, isCodoon, isWeibo;
@@ -40,7 +43,7 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
     @Override
     public void handleLoadPackage(final XC_LoadPackage.LoadPackageParam loadPackageParam) throws Throwable {
         final Object activityThread = XposedHelpers.callStaticMethod(XposedHelpers.findClass("android.app.ActivityThread", null), "currentActivityThread");
-        final Context systemContext = (Context) XposedHelpers.callMethod(activityThread, "getSystemContext");
+        systemContext = (Context) XposedHelpers.callMethod(activityThread, "getSystemContext");
         IntentFilter intentFilter = new IntentFilter();
         String SETTING_CHANGED = "name.caiyao.tencentsport.SETTING_CHANGED";
         intentFilter.addAction(SETTING_CHANGED);
@@ -58,54 +61,35 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                 isWeibo = intent.getExtras().getBoolean("weibo", true);
             }
         }, intentFilter);
-
-        if (loadPackageParam.packageName.equals(YUEDONG) || loadPackageParam.packageName.equals(CODOON)) {
-            Thread autoThread = new Thread() {
-                @Override
-                public void run() {
-                    while (!isInterrupted()) {
-                        if (isYuedong) {
-                            try {
-                                Thread.sleep(100);
-                                if (sObject != null) {
-                                    count++;
-                                    XposedHelpers.callMethod(sObject, "dispatchSensorEvent", 5, new float[]{count, 0, 0}, 3, System.currentTimeMillis());
-                                }
-                                if (count == Integer.MAX_VALUE) {
-                                    count = 0;
-                                }
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        if (isCodoon) {
-                            try {
-                                Thread.sleep(100);
-                                if (sObject != null) {
-                                    count++;
-                                    XposedHelpers.callMethod(sObject, "dispatchSensorEvent", 5, new float[]{count, 0, 0}, 3, System.currentTimeMillis());
-                                }
-                                if (count == Integer.MAX_VALUE) {
-                                    count = 0;
-                                }
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                }
-            };
-            autoThread.start();
-        }
+//        Thread autoThread = new Thread() {
+//            @Override
+//            public void run() {
+//                while (!isInterrupted()) {
+//                    try {
+//                        Thread.sleep(100);
+//                        if (sObject != null) {
+//                            count++;
+//                            XposedHelpers.callMethod(sObject, "dispatchSensorEvent", 5, new float[]{count, 0, 0}, 3, System.currentTimeMillis());
+//                        }
+//                        if (count == Integer.MAX_VALUE) {
+//                            count = 0;
+//                        }
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//
+//                }
+//            }
+//        };
+//        autoThread.start();
 
         if (loadPackageParam.packageName.equals(WEIBO) || loadPackageParam.packageName.equals(PINGAN) || loadPackageParam.packageName.equals(WEXIN) || loadPackageParam.packageName.equals(QQ) || loadPackageParam.packageName.equals(LEDONG) || loadPackageParam.packageName.equals(YUEDONG) || loadPackageParam.packageName.equals(CODOON)) {
             getKey();
             final Class<?> sensorEL = XposedHelpers.findClass("android.hardware.SystemSensorManager$SensorEventQueue", loadPackageParam.classLoader);
             XposedBridge.hookAllMethods(sensorEL, "dispatchSensorEvent", new XC_MethodHook() {
                 @Override
-                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                protected void beforeHookedMethod(final MethodHookParam param) throws Throwable {
                     int handle = (Integer) param.args[0];
-                    sObject = param.thisObject;
                     Field field = param.thisObject.getClass().getDeclaredField("mSensorsEvents");
                     field.setAccessible(true);
                     Sensor ss = ((SparseArray<SensorEvent>) field.get(param.thisObject)).get(handle).sensor;
@@ -164,35 +148,9 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                             }
                         }
                     }
-                    if (ss.getType() == Sensor.TYPE_STEP_COUNTER || ss.getType() == Sensor.TYPE_STEP_DETECTOR) {
-                        if ((isWeixin && loadPackageParam.packageName.equals(WEXIN))) {
-                            if (isAuto) {
-                                if (m * weixinCount < max) {
-                                    ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] + m * weixinCount;
-                                    weixinCount += 1;
-                                } else {
-                                    weixinCount = 0;
-                                }
-                            } else {
-                                ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * m;
-                            }
-                        }
-                        if ((isQQ && loadPackageParam.packageName.equals(QQ))) {
-                            if (isAuto) {
-                                if (m * qqCount < max) {
-                                    ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] + m * qqCount;
-                                    qqCount += 1;
-                                } else {
-                                    qqCount = 0;
-                                }
-                            } else {
-                                ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * m;
-                            }
-                        }
-                        if ((isWeibo && loadPackageParam.packageName.equals(WEIBO))) {
-                            ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * m;
-                        }
-                        XposedBridge.log(loadPackageParam.packageName + "传感器类型：" + ss.getType() + ",修改后：" + ((float[]) param.args[1])[0]);
+                    if (ss.getType() == Sensor.TYPE_STEP_COUNTER) {
+                        XposedHelpers.callMethod(param.thisObject, "dispatchSensorEvent", param.args[0], new float[]{((float[]) param.args[1])[0] + 1, 0, 0}, param.args[2], System.currentTimeMillis());
+                        XposedBridge.log(loadPackageParam.packageName + "，传感器类型：" + ss.getType());
                     }
                 }
             });
