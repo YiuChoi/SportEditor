@@ -29,9 +29,10 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
     private static final String PINGAN = "com.pingan.papd";
     private static final String CODOON = "com.codoon.gps";
     private static final String WEIBO = "com.sina.weibo";
+    private static final String ZHIFUBAO = "com.eg.android.AlipayGphone";
     private static int weixinCount = 0, qqCount = 0, ledongCount = 0, yuedongCount = 0, pinganCount = 0, codoonCount = 0;
     private static float count = 0;
-    private static boolean isWeixin, isQQ, isAuto, isLedong, isYuedong, isPingan, isCodoon, isWeibo;
+    private static boolean isWeixin, isQQ, isAuto, isLedong, isYuedong, isPingan, isCodoon, isWeibo, isAlipay;
     private XSharedPreferences sharedPreferences;
     private static int m, max = Integer.MAX_VALUE;
 
@@ -56,6 +57,7 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                 isPingan = intent.getExtras().getBoolean("pingan", true);
                 isCodoon = intent.getExtras().getBoolean("codoon", true);
                 isWeibo = intent.getExtras().getBoolean("weibo", true);
+                isAlipay = intent.getExtras().getBoolean("alipay", true);
             }
         }, intentFilter);
 
@@ -98,7 +100,7 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
             autoThread.start();
         }
 
-        if (loadPackageParam.packageName.equals(WEIBO) || loadPackageParam.packageName.equals(PINGAN) || loadPackageParam.packageName.equals(WEXIN) || loadPackageParam.packageName.equals(QQ) || loadPackageParam.packageName.equals(LEDONG) || loadPackageParam.packageName.equals(YUEDONG) || loadPackageParam.packageName.equals(CODOON)) {
+        if (loadPackageParam.packageName.equals(ZHIFUBAO) || loadPackageParam.packageName.equals(WEIBO) || loadPackageParam.packageName.equals(PINGAN) || loadPackageParam.packageName.equals(WEXIN) || loadPackageParam.packageName.equals(QQ) || loadPackageParam.packageName.equals(LEDONG) || loadPackageParam.packageName.equals(YUEDONG) || loadPackageParam.packageName.equals(CODOON)) {
             getKey();
             final Class<?> sensorEL = XposedHelpers.findClass("android.hardware.SystemSensorManager$SensorEventQueue", loadPackageParam.classLoader);
             XposedBridge.hookAllMethods(sensorEL, "dispatchSensorEvent", new XC_MethodHook() {
@@ -189,6 +191,9 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                                 ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * m;
                             }
                         }
+                        if (isAlipay && loadPackageParam.packageName.equals(ZHIFUBAO)) {
+                            ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * m;
+                        }
                         if ((isWeibo && loadPackageParam.packageName.equals(WEIBO))) {
                             ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * m;
                         }
@@ -210,6 +215,7 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
         isPingan = sharedPreferences.getBoolean("pingan", true);
         isCodoon = sharedPreferences.getBoolean("codoon", true);
         isWeibo = sharedPreferences.getBoolean("weibo", true);
+        isAlipay = sharedPreferences.getBoolean("alipay", true);
     }
 
     @Override

@@ -52,6 +52,7 @@ public class SettingFragment extends PreferenceFragment implements Preference.On
         intent.putExtra("pingan", getPreferenceManager().getSharedPreferences().getBoolean("pingan", true));
         intent.putExtra("codoon", getPreferenceManager().getSharedPreferences().getBoolean("codoon", true));
         intent.putExtra("weibo", getPreferenceManager().getSharedPreferences().getBoolean("weibo", true));
+        intent.putExtra("alipay", getPreferenceManager().getSharedPreferences().getBoolean("alipay", true));
         if (getActivity() != null) {
             getActivity().sendBroadcast(intent);
         }
