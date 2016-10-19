@@ -192,7 +192,16 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                             }
                         }
                         if (isAlipay && loadPackageParam.packageName.equals(ZHIFUBAO)) {
-                            ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * m;
+                            if (isAuto) {
+                                if (m * qqCount < max) {
+                                    ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] + m * qqCount;
+                                    qqCount += 1;
+                                } else {
+                                    qqCount = 0;
+                                }
+                            } else {
+                                ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * m;
+                            }
                         }
                         if ((isWeibo && loadPackageParam.packageName.equals(WEIBO))) {
                             ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * m;
