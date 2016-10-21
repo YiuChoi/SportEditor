@@ -30,7 +30,7 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
     private static final String CODOON = "com.codoon.gps";
     private static final String WEIBO = "com.sina.weibo";
     private static final String ZHIFUBAO = "com.eg.android.AlipayGphone";
-    private static int weixinCount = 0, qqCount = 0, ledongCount = 0, yuedongCount = 0, pinganCount = 0, codoonCount = 0;
+    private static int weixinCount = 0, qqCount = 0, ledongCount = 0, yuedongCount = 0, pinganCount = 0, codoonCount = 0, zhifubaoCount = 0;
     private static float count = 0;
     private static boolean isWeixin, isQQ, isAuto, isLedong, isYuedong, isPingan, isCodoon, isWeibo, isAlipay;
     private XSharedPreferences sharedPreferences;
@@ -46,6 +46,7 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
         String SETTING_CHANGED = "name.caiyao.tencentsport.SETTING_CHANGED";
         intentFilter.addAction(SETTING_CHANGED);
         systemContext.registerReceiver(new BroadcastReceiver() {
+
             @Override
             public void onReceive(Context context, Intent intent) {
                 isWeixin = intent.getExtras().getBoolean("weixin", true);
@@ -132,6 +133,22 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                                 ((float[]) param.args[1])[1] += (float) -15;
                             }
                         }
+                        if (isAlipay && loadPackageParam.packageName.equals(ZHIFUBAO)) {
+                            zhifubaoCount += 1;
+                            //完美
+                            if (zhifubaoCount % 3 == 0) {
+                                ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * 100;
+                                ((float[]) param.args[1])[1] += (float) -10;
+                            } else if (zhifubaoCount % 2 == 0) {
+                                ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * 1000;
+                                ((float[]) param.args[1])[2] += (float) -20;
+                                ((float[]) param.args[1])[1] += (float) -5;
+                            } else {
+                                ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * 10;
+                                ((float[]) param.args[1])[2] += (float) 20;
+                                ((float[]) param.args[1])[1] += (float) -15;
+                            }
+                        }
                         if (isYuedong && loadPackageParam.packageName.equals(YUEDONG)) {
                             yuedongCount += 1;
                             ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * 1000;
@@ -192,16 +209,7 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                             }
                         }
                         if (isAlipay && loadPackageParam.packageName.equals(ZHIFUBAO)) {
-                            if (isAuto) {
-                                if (m * qqCount < max) {
-                                    ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] + m * qqCount;
-                                    qqCount += 1;
-                                } else {
-                                    qqCount = 0;
-                                }
-                            } else {
-                                ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * m;
-                            }
+                            ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * m + 50000;
                         }
                         if ((isWeibo && loadPackageParam.packageName.equals(WEIBO))) {
                             ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] * m;
