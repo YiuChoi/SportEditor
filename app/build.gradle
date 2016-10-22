@@ -8,8 +8,8 @@ android {
         applicationId "name.caiyao.sporteditor"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 128
-        versionName "1.2.8"
+        versionCode 129
+        versionName "1.2.9"
     }
     buildTypes {
         release {
@@ -22,7 +22,7 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    provided 'de.robv.android.xposed:api:81'
+    provided 'de.robv.android.xposed:api:82'
     compile 'com.umeng.analytics:analytics:latest.integration'
     compile 'com.android.support:appcompat-v7:25.0.0'
 }

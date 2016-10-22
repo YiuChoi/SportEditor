@@ -60,7 +60,7 @@
             android:summaryOn="打开"
             android:title="支付宝步数修改"/>
         <Preference
-            android:summary="倍率*步数，若手机无计步器，则为自动刷步，与倍率无关。悦动圈无法翻倍，只能自动刷。"
+            android:summary="倍率*步数，若手机无计步器，则为自动刷步，与倍率无关。悦动圈无法翻倍，只能自动刷。支付宝每次刷新增加10000"
             android:title="使用说明"/>
     </PreferenceCategory>
 
@@ -89,7 +89,7 @@
         </Preference>
         <Preference
             android:key="version"
-            android:summary="1.2.7测试版"
+            android:summary="1.2.9"
             android:title="关于">
             <intent
                 android:action="android.intent.action.VIEW"
