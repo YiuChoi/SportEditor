@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '25.0.0'
+    buildToolsVersion '25.0.1'
 
     defaultConfig {
         applicationId "name.caiyao.sporteditor"
@@ -24,5 +24,5 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     provided 'de.robv.android.xposed:api:82'
     compile 'com.umeng.analytics:analytics:latest.integration'
-    compile 'com.android.support:appcompat-v7:25.0.0'
+    compile 'com.android.support:appcompat-v7:25.0.1'
 }
