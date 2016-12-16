@@ -2,6 +2,7 @@ package name.caiyao.tencentsport;
 
 
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -20,7 +21,7 @@ public class SettingFragment extends PreferenceFragment implements Preference.On
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getPreferenceManager().setSharedPreferencesMode(1);
+        getPreferenceManager().setSharedPreferencesMode(Context.MODE_WORLD_READABLE);
         getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
         addPreferencesFromResource(R.xml.preference);
     }
