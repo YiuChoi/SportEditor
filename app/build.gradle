@@ -26,4 +26,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.1.0'
     compile 'com.android.support:design:25.1.0'
     provided 'de.robv.android.xposed:api:82'
+    compile 'cn.bmob.android:bmob-sdk:3.5.3'
+    compile 'cn.bmob.android:http-legacy:1.0'
 }
