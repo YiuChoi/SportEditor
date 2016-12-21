@@ -43,15 +43,8 @@ public class SettingFragment extends PreferenceFragment implements Preference.On
     private void getKey() {
         String SETTING_CHANGED = "name.caiyao.tencentsport.SETTING_CHANGED";
         Intent intent = new Intent(SETTING_CHANGED);
-        intent.putExtra("weixin", getPreferenceManager().getSharedPreferences().getBoolean("weiixn", true));
-        intent.putExtra("qq", getPreferenceManager().getSharedPreferences().getBoolean("qq", true));
         intent.putExtra("magnification", getPreferenceManager().getSharedPreferences().getString("magnification", "100"));
-        intent.putExtra("autoincrement", getPreferenceManager().getSharedPreferences().getBoolean("autoincrement", false));
-        intent.putExtra("ledong", getPreferenceManager().getSharedPreferences().getBoolean("ledong", true));
-        intent.putExtra("yuedong", getPreferenceManager().getSharedPreferences().getBoolean("yuedong", true));
-        intent.putExtra("pingan", getPreferenceManager().getSharedPreferences().getBoolean("pingan", true));
-        intent.putExtra("codoon", getPreferenceManager().getSharedPreferences().getBoolean("codoon", true));
-        intent.putExtra("weibo", getPreferenceManager().getSharedPreferences().getBoolean("weibo", true));
+        intent.putExtra("on", getPreferenceManager().getSharedPreferences().getBoolean("on", true));
         if (getActivity() != null) {
             getActivity().sendBroadcast(intent);
         }
