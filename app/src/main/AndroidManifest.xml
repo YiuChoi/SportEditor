@@ -24,7 +24,7 @@
             android:value="30" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".SettingsActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -39,7 +39,7 @@
             android:enabled="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
-            android:targetActivity=".MainActivity">
+            android:targetActivity=".SettingsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -54,10 +54,6 @@
             android:name="UMENG_CHANNEL"
             android:value="Channel ID" />
 
-        <activity
-            android:name=".SettingsActivity"
-            android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
