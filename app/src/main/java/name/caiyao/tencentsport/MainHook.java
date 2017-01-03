@@ -209,7 +209,7 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                             }
                         }
                         if (isAlipay && loadPackageParam.packageName.equals(ZHIFUBAO)) {
-                            if (m * zhifubaoCount < Integer.MAX_VALUE) {
+                            if (10000 * zhifubaoCount < Integer.MAX_VALUE) {
                                 ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] + 10000 * zhifubaoCount;
                                 zhifubaoCount += 1;
                             } else {
