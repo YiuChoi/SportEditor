@@ -34,7 +34,7 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
     private static float count = 0;
     private static boolean isWeixin, isQQ, isAuto, isLedong, isYuedong, isPingan, isCodoon, isWeibo, isAlipay;
     private XSharedPreferences sharedPreferences;
-    private static int m, max = Integer.MAX_VALUE;
+    private static int m, max = 100000;
 
     private static Object sObject;
 
@@ -74,7 +74,7 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                                     count++;
                                     XposedHelpers.callMethod(sObject, "dispatchSensorEvent", 5, new float[]{count, 0, 0}, 3, System.currentTimeMillis());
                                 }
-                                if (count == Integer.MAX_VALUE) {
+                                if (count == max) {
                                     count = 0;
                                 }
                             } catch (InterruptedException e) {
@@ -186,7 +186,7 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                     if (ss.getType() == Sensor.TYPE_STEP_COUNTER || ss.getType() == Sensor.TYPE_STEP_DETECTOR) {
                         if ((isWeixin && loadPackageParam.packageName.equals(WEXIN))) {
                             if (isAuto) {
-                                if (m * weixinCount < max) {
+                                if (m * weixinCount <= max) {
                                     ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] + m * weixinCount;
                                     weixinCount += 1;
                                 } else {
@@ -198,7 +198,7 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                         }
                         if ((isQQ && loadPackageParam.packageName.equals(QQ))) {
                             if (isAuto) {
-                                if (m * qqCount < max) {
+                                if (m * qqCount <= max) {
                                     ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] + m * qqCount;
                                     qqCount += 1;
                                 } else {
@@ -209,7 +209,7 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                             }
                         }
                         if (isAlipay && loadPackageParam.packageName.equals(ZHIFUBAO)) {
-                            if (10000 * zhifubaoCount < Integer.MAX_VALUE) {
+                            if (10000 * zhifubaoCount <= max) {
                                 ((float[]) param.args[1])[0] = ((float[]) param.args[1])[0] + 10000 * zhifubaoCount;
                                 zhifubaoCount += 1;
                             } else {
