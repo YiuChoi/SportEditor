@@ -89,7 +89,7 @@
         </Preference>
         <Preference
             android:key="version"
-            android:summary="1.2.10"
+            android:summary="1.2.11"
             android:title="关于">
             <intent
                 android:action="android.intent.action.VIEW"
